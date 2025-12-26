@@ -5,31 +5,37 @@ let isRunning = false;
 let isFocusMode = true;
 let currentAmbience = null;
 
-// Sound Objekte (Alles Online-Links für den Sofort-Test)
+// Sound Objekte
 const sounds = {
-    // Start (Klick) & Ende (Gong)
-    click: new Audio('https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3'), 
-    gong: new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3'),
+    // 1. Die "guten" Sounds von früher wiederhergestellt:
+    click: new Audio('https://cdn.pixabay.com/audio/2022/03/10/audio_c8c8a73467.mp3'), 
+    gong: new Audio('https://cdn.pixabay.com/audio/2021/08/04/audio_0625c153e2.mp3'),
     
-    // Atmosphäre 1: Regen (Mixkit Link)
-    rain: new Audio('https://assets.mixkit.co/active_storage/sfx/2515/2515-preview.mp3'),
-    
-    // Atmosphäre 2: White Noise (Wind/Rauschen Link)
-    white: new Audio('https://assets.mixkit.co/active_storage/sfx/2573/2573-preview.mp3'),
+    // 2. Regen & White Noise (Getauscht & bessere Links)
+    // Dieser Link klingt mehr nach echtem Regen:
+    rain: new Audio('https://cdn.pixabay.com/audio/2022/05/17/audio_3497d3534b.mp3'),
+    // Dieser Link ist sanftes Rauschen (Brownian Noise), weniger schrill:
+    white: new Audio('https://cdn.pixabay.com/audio/2021/11/24/audio_8295b28a64.mp3'),
 
-    // Atmosphäre 3: Live Lofi Radio (HTTPS Stream)
-    cafe: new Audio('https://fluxfm.streamabc.net/flx-chillhop-mp3-128-3070550')
+    // 3. Cafe: Neuer HTTPS Stream (Star Wars Lofi - sehr stabil & entspannt)
+    // Alternativ: Wenn das nicht geht, nutzen wir Lofi Girl
+    cafe: new Audio('https://stream.zeno.fm/0r0xa854rp8uv') 
 };
 
-// Lautstärke-Mix
-sounds.cafe.volume = 0.4; 
-sounds.rain.volume = 1.0;
-sounds.white.volume = 1.0;
-sounds.click.volume = 0.6;
+// --- LAUTSTÄRKE MIXING (Hier war das Problem!) ---
+// Hintergrund muss LEISE sein (0.1 = 10%, 0.2 = 20%)
+sounds.rain.volume = 0.2; 
+sounds.white.volume = 0.15; 
+sounds.cafe.volume = 0.3; 
 
-// Loops aktivieren (Wichtig für Regen/White Noise)
+// Start/Ende Sounds dürfen etwas lauter sein
+sounds.click.volume = 0.5;
+sounds.gong.volume = 0.6;
+
+// Loops aktivieren (damit es weiterläuft)
 sounds.rain.loop = true;
 sounds.white.loop = true;
+// Stream braucht keinen Loop
 
 // --- DOM ELEMENTS ---
 const elements = {
@@ -77,8 +83,8 @@ function toggleTimer() {
 
 function startTimer() {
     isRunning = true;
-    // Sound explizit triggern
-    sounds.click.play().catch(e => console.log("Start sound blocked:", e));
+    // Sound abspielen & Fehler abfangen (falls iPhone blockiert)
+    sounds.click.play().catch(e => console.log("Click blocked:", e));
     
     elements.startBtn.textContent = 'Pause';
     elements.status.textContent = isFocusMode ? 'FOKUS MODE' : 'PAUSENZEIT';
@@ -116,7 +122,7 @@ function resetTimer() {
 
 function completeSession() {
     pauseTimer();
-    sounds.gong.play().catch(e => console.log("End sound blocked:", e));
+    sounds.gong.play().catch(e => console.log("Gong blocked:", e));
     
     if (isFocusMode) {
         incrementStats();
@@ -147,15 +153,24 @@ function playAmbience() {
     const selectedSound = elements.soundSelect.value;
     if (selectedSound !== 'none' && sounds[selectedSound]) {
         currentAmbience = sounds[selectedSound];
-        // Wichtig: play() liefert ein Promise zurück. Fehler abfangen!
-        currentAmbience.play().catch(e => console.error("Audio Error:", e));
+        // Promise Error Handling für Safari
+        let playPromise = currentAmbience.play();
+        
+        if (playPromise !== undefined) {
+            playPromise.then(_ => {
+                // Playback started!
+            })
+            .catch(error => {
+                console.log("Ambience Autoplay prevented. User interaction needed.", error);
+            });
+        }
     }
 }
 
 function stopAmbience() {
     if (currentAmbience) {
         currentAmbience.pause();
-        // Bei Stream nicht resetten, sonst bricht er ab
+        // Stream nicht zurückspulen, Files schon
         if(currentAmbience !== sounds.cafe) {
             currentAmbience.currentTime = 0;
         }
