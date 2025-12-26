@@ -1,11 +1,9 @@
-// --- STATE ---
 let timeLeft = 25 * 60;
 let timerId = null;
 let isRunning = false;
 let isFocusMode = true;
 let currentAudioId = null; 
 
-// --- DOM ELEMENTS ---
 const elements = {
     timer: document.getElementById('timer'),
     startBtn: document.getElementById('startBtn'),
@@ -19,28 +17,24 @@ const elements = {
     mainTask: document.getElementById('main-task-input'),
     shortcutBtn: document.getElementById('pomodoroShortcut'),
     resetBtn: document.getElementById('resetBtn'),
-    // Audio Elements aus dem HTML holen
     audioClick: document.getElementById('audio-click'),
     audioGong: document.getElementById('audio-gong')
 };
 
-// --- INITIALIZATION ---
 function init() {
-    // Theme
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme === 'dark') {
         document.documentElement.setAttribute('data-theme', 'dark');
         elements.themeToggle.checked = true;
     }
     
-    // Lautstärke Einstellungen
     const rain = document.getElementById('audio-rain');
     const white = document.getElementById('audio-white');
     const cafe = document.getElementById('audio-cafe');
 
     if(rain) rain.volume = 0.3;
-    if(white) white.volume = 0.2;
-    if(cafe) cafe.volume = 0.6;
+    if(white) white.volume = 0.05; 
+    if(cafe) cafe.volume = 0.4;
     
     if(elements.audioClick) elements.audioClick.volume = 1.0;
     if(elements.audioGong) elements.audioGong.volume = 1.0;
@@ -50,7 +44,6 @@ function init() {
     elements.mainTask.value = localStorage.getItem('mainTaskContent') || '';
 }
 
-// --- SOUND CONTROL ---
 function playSelectedAmbience() {
     const selection = elements.soundSelect.value;
     stopAmbience();
@@ -65,7 +58,7 @@ function playSelectedAmbience() {
     if (targetId) {
         const player = document.getElementById(targetId);
         if(player) {
-            player.play().catch(e => console.log("Abspielen blockiert:", e));
+            player.play().catch(e => console.log(e));
             currentAudioId = targetId;
         }
     }
@@ -76,15 +69,12 @@ function stopAmbience() {
         const player = document.getElementById(currentAudioId);
         if(player) {
             player.pause();
-            if (currentAudioId !== 'audio-cafe') {
-                player.currentTime = 0;
-            }
+            player.currentTime = 0;
         }
         currentAudioId = null;
     }
 }
 
-// --- TIMER LOGIC ---
 function updateDisplay() {
     const minutes = Math.floor(timeLeft / 60);
     const seconds = timeLeft % 60;
@@ -165,7 +155,6 @@ function quickStartPomodoro() {
     startTimer();
 }
 
-// --- EVENT LISTENERS ---
 elements.soundSelect.addEventListener('change', function() {
     if (isRunning) {
         playSelectedAmbience();
