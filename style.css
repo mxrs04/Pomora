@@ -8,7 +8,11 @@
     --secondary-btn-bg: rgba(0, 0, 0, 0.05);
     --secondary-btn-text: #1c1c1e;
     --shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
-    --input-bg: rgba(255,255,255,0.5);
+    
+    /* NEU: Stärkerer Hintergrund & Rahmen für Inputs */
+    --input-bg: rgba(255, 255, 255, 0.9); 
+    --input-border: rgba(0, 0, 0, 0.1);
+    
     --toggle-track: #e9e9ea;
     --toggle-thumb: #fff;
 }
@@ -23,7 +27,11 @@
     --secondary-btn-bg: rgba(255, 255, 255, 0.12);
     --secondary-btn-text: #ffffff;
     --shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
-    --input-bg: rgba(0,0,0,0.3);
+    
+    /* NEU: Dunklerer Hintergrund & Rahmen für Dark Mode */
+    --input-bg: rgba(60, 60, 60, 0.8);
+    --input-border: rgba(255, 255, 255, 0.2);
+    
     --toggle-track: #39393d;
     --toggle-thumb: #fff;
 }
@@ -119,26 +127,47 @@ body {
 input:checked + .slider { background-color: #30d158; }
 input:checked + .slider:before { transform: translateX(18px); }
 
-.glass-input {
+/* --- NEU GESTALTETE INPUTS & SELECTS --- */
+.glass-input, select {
     width: 100%;
-    border: none;
+    padding: 14px;
+    border-radius: 14px;
+    
+    /* Hier ist die Änderung für bessere Sichtbarkeit: */
+    border: 1px solid var(--input-border);
     background: var(--input-bg);
-    padding: 15px;
-    border-radius: 16px;
+    
     color: var(--text-color);
     font-family: inherit;
     font-size: 1rem;
     box-sizing: border-box;
     outline: none;
-    resize: none;
+    -webkit-appearance: none;
+    transition: all 0.3s ease;
+    
+    /* Kleiner Schatten für Tiefe */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+}
+
+/* Fokus-Effekt: Wenn man draufklickt */
+.glass-input:focus, select:focus {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.15);
 }
 
 .glass-input::placeholder { color: var(--text-color); opacity: 0.5; }
-
 #main-task-input {
     text-align: center;
     font-weight: 500;
     font-size: 1.1rem;
+}
+
+/* Damit Dropdowns den Pfeil behalten (optional, sieht aber oft besser aus) */
+select {
+    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27292.4%27%20height%3D%27292.4%27%3E%3Cpath%20fill%3D%27%23888%27%20d%3D%27M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.7-9.2-5.4-12.8z%27%2F%3E%3C%2Fsvg%3E");
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    background-size: 10px;
 }
 
 .status {
@@ -220,20 +249,9 @@ input:checked + .slider:before { transform: translateX(18px); }
     padding-left: 5px;
 }
 
-select {
-    width: 100%;
-    padding: 12px;
-    border-radius: 12px;
-    border: none;
-    background: var(--input-bg);
-    color: var(--text-color);
-    font-size: 0.95rem;
-    outline: none;
-    -webkit-appearance: none;
-}
-
 .notepad-area textarea {
     min-height: 80px;
     font-size: 0.9rem;
     line-height: 1.4;
+    resize: none;
 }
