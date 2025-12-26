@@ -3,21 +3,33 @@ let timeLeft = 25 * 60;
 let timerId = null;
 let isRunning = false;
 let isFocusMode = true;
+let currentAmbience = null;
 
-// Sound URLs
+// Sound Objekte (Alles Online-Links für den Sofort-Test)
 const sounds = {
-    click: new Audio('https://cdn.pixabay.com/audio/2022/03/10/audio_c8c8a73467.mp3'),
-    gong: new Audio('https://cdn.pixabay.com/audio/2021/08/04/audio_0625c153e2.mp3'),
-    rain: new Audio('https://cdn.pixabay.com/audio/2022/05/17/audio_3497d3534b.mp3'),
-    cafe: new Audio('https://cdn.pixabay.com/audio/2017/08/08/00/39/coffee-shop-2610565_1280.mp3'),
-    white: new Audio('https://cdn.pixabay.com/audio/2021/11/24/audio_8295b28a64.mp3')
+    // Start (Klick) & Ende (Gong)
+    click: new Audio('https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3'), 
+    gong: new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3'),
+    
+    // Atmosphäre 1: Regen (Mixkit Link)
+    rain: new Audio('https://assets.mixkit.co/active_storage/sfx/2515/2515-preview.mp3'),
+    
+    // Atmosphäre 2: White Noise (Wind/Rauschen Link)
+    white: new Audio('https://assets.mixkit.co/active_storage/sfx/2573/2573-preview.mp3'),
+
+    // Atmosphäre 3: Live Lofi Radio (HTTPS Stream)
+    cafe: new Audio('https://fluxfm.streamabc.net/flx-chillhop-mp3-128-3070550')
 };
 
-// Loop Hintergrundgeräusche
+// Lautstärke-Mix
+sounds.cafe.volume = 0.4; 
+sounds.rain.volume = 1.0;
+sounds.white.volume = 1.0;
+sounds.click.volume = 0.6;
+
+// Loops aktivieren (Wichtig für Regen/White Noise)
 sounds.rain.loop = true;
-sounds.cafe.loop = true;
 sounds.white.loop = true;
-let currentAmbience = null;
 
 // --- DOM ELEMENTS ---
 const elements = {
@@ -37,17 +49,12 @@ const elements = {
 
 // --- INITIALIZATION ---
 function init() {
-    // Theme laden
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme === 'dark') {
         document.documentElement.setAttribute('data-theme', 'dark');
         elements.themeToggle.checked = true;
     }
-
-    // Statistik laden
     loadStats();
-
-    // Notizen laden
     elements.notepad.value = localStorage.getItem('notepadContent') || '';
     elements.mainTask.value = localStorage.getItem('mainTaskContent') || '';
 }
@@ -70,7 +77,9 @@ function toggleTimer() {
 
 function startTimer() {
     isRunning = true;
-    sounds.click.play();
+    // Sound explizit triggern
+    sounds.click.play().catch(e => console.log("Start sound blocked:", e));
+    
     elements.startBtn.textContent = 'Pause';
     elements.status.textContent = isFocusMode ? 'FOKUS MODE' : 'PAUSENZEIT';
     elements.status.style.opacity = '1';
@@ -107,7 +116,7 @@ function resetTimer() {
 
 function completeSession() {
     pauseTimer();
-    sounds.gong.play();
+    sounds.gong.play().catch(e => console.log("End sound blocked:", e));
     
     if (isFocusMode) {
         incrementStats();
@@ -138,28 +147,26 @@ function playAmbience() {
     const selectedSound = elements.soundSelect.value;
     if (selectedSound !== 'none' && sounds[selectedSound]) {
         currentAmbience = sounds[selectedSound];
-        currentAmbience.play().catch(e => console.log('Audio Autoplay Blocked'));
+        // Wichtig: play() liefert ein Promise zurück. Fehler abfangen!
+        currentAmbience.play().catch(e => console.error("Audio Error:", e));
     }
 }
 
 function stopAmbience() {
     if (currentAmbience) {
         currentAmbience.pause();
-        currentAmbience.currentTime = 0;
+        // Bei Stream nicht resetten, sonst bricht er ab
+        if(currentAmbience !== sounds.cafe) {
+            currentAmbience.currentTime = 0;
+        }
     }
 }
 
-// --- STATS LOGIC ---
+// --- STATS & EVENTS ---
 function loadStats() {
     const today = new Date().toLocaleDateString();
     const stats = JSON.parse(localStorage.getItem('glassFocusStats')) || { date: today, count: 0 };
-
-    // Reset wenn neuer Tag
-    if (stats.date !== today) {
-        stats.date = today;
-        stats.count = 0;
-    }
-    
+    if (stats.date !== today) { stats.date = today; stats.count = 0; }
     elements.sessionCount.textContent = stats.count;
     localStorage.setItem('glassFocusStats', JSON.stringify(stats));
 }
@@ -171,31 +178,13 @@ function incrementStats() {
     elements.sessionCount.textContent = stats.count;
 }
 
-// --- EVENT LISTENERS ---
 elements.startBtn.addEventListener('click', toggleTimer);
 elements.resetBtn.addEventListener('click', resetTimer);
 elements.shortcutBtn.addEventListener('click', quickStartPomodoro);
 
-elements.focusSelect.addEventListener('change', function() {
-    if (!isRunning && isFocusMode) {
-        timeLeft = parseInt(this.value) * 60;
-        updateDisplay();
-    }
-});
-
-elements.breakSelect.addEventListener('change', function() {
-    if (!isRunning && !isFocusMode) {
-        timeLeft = parseInt(this.value) * 60;
-        updateDisplay();
-    }
-});
-
-elements.soundSelect.addEventListener('change', function() {
-    if (isRunning) {
-        stopAmbience();
-        playAmbience();
-    }
-});
+elements.focusSelect.addEventListener('change', function() { if (!isRunning && isFocusMode) { timeLeft = parseInt(this.value) * 60; updateDisplay(); }});
+elements.breakSelect.addEventListener('change', function() { if (!isRunning && !isFocusMode) { timeLeft = parseInt(this.value) * 60; updateDisplay(); }});
+elements.soundSelect.addEventListener('change', function() { if (isRunning) { stopAmbience(); playAmbience(); }});
 
 elements.themeToggle.addEventListener('change', function(e) {
     const theme = e.target.checked ? 'dark' : 'light';
@@ -203,16 +192,13 @@ elements.themeToggle.addEventListener('change', function(e) {
     localStorage.setItem('theme', theme);
 });
 
-// Auto-Save für Notizen
 elements.notepad.addEventListener('input', (e) => localStorage.setItem('notepadContent', e.target.value));
 elements.mainTask.addEventListener('input', (e) => localStorage.setItem('mainTaskContent', e.target.value));
 
-// UI Helper
 function flashScreen(color) {
     const originalBg = getComputedStyle(document.body).backgroundColor;
     document.body.style.backgroundColor = color;
     setTimeout(() => { document.body.style.backgroundColor = ""; }, 300);
 }
 
-// Start
 init();
