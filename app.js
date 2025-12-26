@@ -28,14 +28,8 @@ function init() {
         elements.themeToggle.checked = true;
     }
     
-    const rain = document.getElementById('audio-rain');
-    const white = document.getElementById('audio-white');
-    const cafe = document.getElementById('audio-cafe');
-
-    if(rain) rain.volume = 0.3;
-    if(white) white.volume = 0.01; 
-    if(cafe) cafe.volume = 0.4;
-    
+    // START-KONFIGURATION
+    // Klick & Gong laut
     if(elements.audioClick) elements.audioClick.volume = 1.0;
     if(elements.audioGong) elements.audioGong.volume = 1.0;
 
@@ -46,19 +40,33 @@ function init() {
 
 function playSelectedAmbience() {
     const selection = elements.soundSelect.value;
-    stopAmbience();
+    stopAmbience(); // Erstmal alles andere aus
 
     if (selection === 'none') return;
 
     let targetId = '';
-    if (selection === 'rain') targetId = 'audio-rain';
-    if (selection === 'white') targetId = 'audio-white';
-    if (selection === 'cafe') targetId = 'audio-cafe';
+    // HIER SETZEN WIR DIE LAUTSTÄRKE JETZT DIREKT BEIM ABSPIELEN
+    // Damit wird sichergestellt, dass sie angewendet wird
+    let volumeLevel = 0.5; // Standard
+
+    if (selection === 'rain') {
+        targetId = 'audio-rain';
+        volumeLevel = 0.3; // Regen Lautstärke (30%)
+    }
+    if (selection === 'white') {
+        targetId = 'audio-white';
+        volumeLevel = 0.05; // White/Brown Noise SEHR LEISE (5%)
+    }
+    if (selection === 'cafe') {
+        targetId = 'audio-cafe';
+        volumeLevel = 0.4; // Cafe Lautstärke (40%)
+    }
 
     if (targetId) {
         const player = document.getElementById(targetId);
         if(player) {
-            player.play().catch(e => console.log(e));
+            player.volume = volumeLevel; // Hier wird die Lautstärke erzwungen!
+            player.play().catch(e => console.log("Abspielen blockiert:", e));
             currentAudioId = targetId;
         }
     }
@@ -69,7 +77,7 @@ function stopAmbience() {
         const player = document.getElementById(currentAudioId);
         if(player) {
             player.pause();
-            player.currentTime = 0;
+            player.currentTime = 0; // Zurückspulen
         }
         currentAudioId = null;
     }
@@ -155,6 +163,7 @@ function quickStartPomodoro() {
     startTimer();
 }
 
+// EVENTS
 elements.soundSelect.addEventListener('change', function() {
     if (isRunning) {
         playSelectedAmbience();
