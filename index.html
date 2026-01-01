@@ -5,15 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="GlassFocus">
+    <meta name="apple-mobile-web-app-title" content="Pomora">
     <link rel="apple-touch-icon" href="icon.png">
     <link rel="stylesheet" href="style.css">
-    <title>Glass Focus v8</title>
+    <title>Pomora</title>
 </head>
 <body>
 
     <div class="app-container glass">
         
+        <h1 class="app-title">Pomora <span>🍅</span></h1>
+
         <header class="header">
             <div class="stats-badge glass-inset">
                 <span id="session-count">0</span> Sessions heute
@@ -49,7 +51,6 @@
         </section>
 
         <section class="settings-section">
-            
             <div class="settings-row">
                 <div class="setting-group">
                     <label>Fokuszeit</label>
@@ -81,27 +82,17 @@
             </div>
 
             <div class="notepad-area">
-                <label>Gedanken & ToDos (Brain Dump)</label>
+                <label>Gedanken & ToDos</label>
                 <textarea id="notepad" class="glass-input" placeholder="Schreib es auf, damit du es nicht vergisst..."></textarea>
             </div>
-
         </section>
 
     </div>
 
-  <div style="display:none;">
-        <audio id="audio-rain" loop preload="auto">
-            <source src="sounds/rain.mp3" type="audio/mpeg">
-        </audio>
-
-        <audio id="audio-white" loop preload="auto">
-            <source src="sounds/white.mp3" type="audio/mpeg">
-        </audio>
-
-        <audio id="audio-cafe" loop preload="auto">
-            <source src="sounds/cafe.mp3" type="audio/mpeg">
-        </audio>
-        
+    <div style="display:none;">
+        <audio id="audio-rain" loop preload="auto"><source src="sounds/rain.mp3" type="audio/mpeg"></audio>
+        <audio id="audio-white" loop preload="auto"><source src="sounds/white.mp3" type="audio/mpeg"></audio>
+        <audio id="audio-cafe" loop preload="auto"><source src="sounds/cafe.mp3" type="audio/mpeg"></audio>
         <audio id="audio-click" preload="auto" src="https://cdn.pixabay.com/audio/2022/03/10/audio_c8c8a73467.mp3"></audio>
         <audio id="audio-gong" preload="auto" src="https://cdn.pixabay.com/audio/2021/08/04/audio_0625c153e2.mp3"></audio>
     </div>

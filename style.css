@@ -255,3 +255,19 @@ select {
     line-height: 1.4;
     resize: none;
 }
+/* --- NEU: Titel Design --- */
+.app-title {
+    font-size: 2rem;
+    font-weight: 800;
+    margin: 0 0 15px 0;
+    letter-spacing: -1px;
+    background: linear-gradient(135deg, var(--text-color) 0%, var(--accent-color) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: inline-block;
+}
+
+/* Kleiner Fix, damit der Emoji sichtbar bleibt (Emojis mögen keine transparenten Textfarben) */
+.app-title span {
+    -webkit-text-fill-color: initial; 
+}
