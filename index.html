@@ -20,88 +20,86 @@
 
     <div class="app-container">
         
-        <div class="glass-panel main-panel">
-            <div class="panel-header">
-                <span class="icon">⏱️</span>
-                <h2>Fokus Zone</h2>
+        <div class="panel-column main-column">
+            <h2 class="section-label"><span class="icon">⏱️</span> Fokus Zone</h2>
+            
+            <div class="glass-panel">
+                <header class="header">
+                    <div class="stats-badge glass-inset">
+                        <span id="session-count">0</span> Sessions
+                    </div>
+                    <div class="theme-switch-wrapper">
+                        <span>☀️</span>
+                        <label class="switch">
+                            <input type="checkbox" id="theme-toggle">
+                            <span class="slider"></span>
+                        </label>
+                        <span>🌙</span>
+                    </div>
+                </header>
+
+                <section class="timer-section">
+                    <div class="status" id="status-text">BEREIT</div>
+                    <div class="timer-display" id="timer">25:00</div>
+                </section>
+
+                <section class="task-section">
+                    <input type="text" id="main-task-input" class="glass-input" placeholder="Woran arbeitest du gerade?">
+                </section>
+
+                <section class="controls-container">
+                    <div class="main-controls">
+                        <button class="btn btn-primary" id="startBtn">Start</button>
+                        <button class="btn btn-secondary" id="resetBtn">Reset</button>
+                    </div>
+                    <button class="btn btn-secondary shortcut-btn" id="pomodoroShortcut">
+                        <span>🚀</span> Quick Start (25/5)
+                    </button>
+                </section>
             </div>
-
-            <header class="header">
-                <div class="stats-badge glass-inset">
-                    <span id="session-count">0</span> Sessions
-                </div>
-                <div class="theme-switch-wrapper">
-                    <span>☀️</span>
-                    <label class="switch">
-                        <input type="checkbox" id="theme-toggle">
-                        <span class="slider"></span>
-                    </label>
-                    <span>🌙</span>
-                </div>
-            </header>
-
-            <section class="timer-section">
-                <div class="status" id="status-text">BEREIT</div>
-                <div class="timer-display" id="timer">25:00</div>
-            </section>
-
-            <section class="task-section">
-                <input type="text" id="main-task-input" class="glass-input" placeholder="Woran arbeitest du gerade?">
-            </section>
-
-            <section class="controls-container">
-                <div class="main-controls">
-                    <button class="btn btn-primary" id="startBtn">Start</button>
-                    <button class="btn btn-secondary" id="resetBtn">Reset</button>
-                </div>
-                <button class="btn btn-secondary shortcut-btn" id="pomodoroShortcut">
-                    <span>🚀</span> Quick Start (25/5)
-                </button>
-            </section>
         </div>
 
-        <div class="glass-panel settings-panel">
-            <div class="panel-header">
-                <span class="icon">⚙️</span>
-                <h2>Setup & Gedanken</h2>
+        <div class="panel-column settings-column">
+            <h2 class="section-label"><span class="icon">⚙️</span> Setup & Gedanken</h2>
+
+            <div class="glass-panel">
+                <section class="settings-section">
+                    <div class="settings-row">
+                        <div class="setting-group">
+                            <label>Fokuszeit</label>
+                            <select id="focusTimeSelect">
+                                <option value="15">15 Min</option>
+                                <option value="25" selected>25 Min</option>
+                                <option value="45">45 Min</option>
+                                <option value="60">60 Min</option>
+                            </select>
+                        </div>
+                        <div class="setting-group">
+                            <label>Pause</label>
+                            <select id="breakTimeSelect">
+                                <option value="5" selected>5 Min</option>
+                                <option value="10">10 Min</option>
+                                <option value="15">15 Min</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="setting-group full-width">
+                        <label>Atmosphäre</label>
+                        <select id="soundSelect">
+                            <option value="none" selected>🔇 Stille</option>
+                            <option value="rain">🌧️ Leichter Regen</option>
+                            <option value="cafe">☕ Café Umgebung</option>
+                            <option value="white">🌊 White Noise</option>
+                        </select>
+                    </div>
+
+                    <div class="notepad-area">
+                        <label>🧠 Brain Dump (Notizen)</label>
+                        <textarea id="notepad" class="glass-input" placeholder="Schreib alles auf, was dich ablenkt..."></textarea>
+                    </div>
+                </section>
             </div>
-
-            <section class="settings-section">
-                <div class="settings-row">
-                    <div class="setting-group">
-                        <label>Fokuszeit</label>
-                        <select id="focusTimeSelect">
-                            <option value="15">15 Min</option>
-                            <option value="25" selected>25 Min</option>
-                            <option value="45">45 Min</option>
-                            <option value="60">60 Min</option>
-                        </select>
-                    </div>
-                    <div class="setting-group">
-                        <label>Pause</label>
-                        <select id="breakTimeSelect">
-                            <option value="5" selected>5 Min</option>
-                            <option value="10">10 Min</option>
-                            <option value="15">15 Min</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="setting-group full-width">
-                    <label>Atmosphäre</label>
-                    <select id="soundSelect">
-                        <option value="none" selected>🔇 Stille</option>
-                        <option value="rain">🌧️ Leichter Regen</option>
-                        <option value="cafe">☕ Café Umgebung</option>
-                        <option value="white">🌊 White Noise</option>
-                    </select>
-                </div>
-
-                <div class="notepad-area">
-                    <label>🧠 Brain Dump (Notizen)</label>
-                    <textarea id="notepad" class="glass-input" placeholder="Schreib alles auf, was dich ablenkt..."></textarea>
-                </div>
-            </section>
         </div>
 
     </div>

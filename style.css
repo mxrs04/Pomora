@@ -5,8 +5,8 @@
     --glass-border: rgba(255, 255, 255, 0.8);
     --glass-inset: rgba(0, 0, 0, 0.05);
     
-    --accent-color: #007aff; /* Blau für Fokus */
-    --pause-color: #ff9f0a;  /* NEU: Orange für Pause */
+    --accent-color: #007aff; 
+    --pause-color: #ff9f0a; 
     
     --input-bg: rgba(255, 255, 255, 0.9); 
     --input-border: rgba(0, 0, 0, 0.1);
@@ -25,7 +25,7 @@
     --glass-inset: rgba(255, 255, 255, 0.1);
     
     --accent-color: #0a84ff;
-    --pause-color: #ff9f0a; /* Orange leuchtet auch im Dark Mode gut */
+    --pause-color: #ff9f0a; 
     
     --input-bg: rgba(60, 60, 60, 0.8);
     --input-border: rgba(255, 255, 255, 0.2);
@@ -56,7 +56,7 @@ body {
 .app-title {
     font-size: 2.5rem;
     font-weight: 800;
-    margin: 0 0 15px 0; /* Etwas Platz nach unten zum Balken */
+    margin: 0 0 15px 0;
     letter-spacing: -1px;
     background: linear-gradient(135deg, var(--text-color) 0%, var(--accent-color) 100%);
     -webkit-background-clip: text;
@@ -66,15 +66,15 @@ body {
 }
 .app-title span { -webkit-text-fill-color: initial; }
 
-/* --- PROGRESS BAR (NEU POSITIONIERT) --- */
+/* --- PROGRESS BAR (Mittig) --- */
 .progress-container {
     width: 100%;
-    max-width: 450px; /* Genau so breit wie die App-Boxen */
+    max-width: 450px; 
     height: 8px;
-    background: rgba(128, 128, 128, 0.2); /* Dezent grau */
-    margin-bottom: 25px; /* Abstand zu den Panels */
-    border-radius: 10px; /* Schön rund */
-    overflow: hidden; /* Damit der Balken an den Ecken nicht übersteht */
+    background: rgba(128, 128, 128, 0.2); 
+    margin-bottom: 35px; /* Etwas mehr Platz zu den Labels */
+    border-radius: 10px; 
+    overflow: hidden; 
 }
 
 .progress-bar {
@@ -92,8 +92,23 @@ body {
     padding: 10px;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 30px; /* Mehr Abstand zwischen den Blöcken auf Mobile */
 }
+
+/* --- SECTION LABELS (NEU: Überschriften über den Boxen) --- */
+.section-label {
+    margin: 0 0 10px 5px; /* Kleiner Abstand zur Box darunter */
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-weight: 700;
+    color: var(--text-color);
+    opacity: 0.6;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.section-label .icon { font-size: 1.1rem; }
 
 /* --- PANELS --- */
 .glass-panel {
@@ -114,28 +129,6 @@ body {
     transform: translateY(-2px);
     box-shadow: 0 12px 40px rgba(0,0,0,0.15);
 }
-
-/* Panel Header */
-.panel-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 10px;
-    padding-bottom: 15px;
-    border-bottom: 1px solid var(--glass-border);
-}
-
-.panel-header h2 {
-    margin: 0;
-    font-size: 0.9rem;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    font-weight: 700;
-    color: var(--text-color);
-    opacity: 0.6;
-}
-
-.panel-header .icon { font-size: 1.2rem; }
 
 /* Inhalte */
 .header { display: flex; justify-content: space-between; align-items: center; }
@@ -190,7 +183,6 @@ select {
     transition: color 0.3s ease;
 }
 
-/* Timer Display */
 .timer-display {
     font-size: 4.5rem; font-weight: 200; font-variant-numeric: tabular-nums;
     line-height: 1; color: var(--text-color); transition: color 0.3s ease;
@@ -199,29 +191,20 @@ select {
 .controls-container { display: flex; flex-direction: column; gap: 12px; }
 .main-controls { display: flex; gap: 15px; }
 
-/* --- BUTTONS --- */
+/* Buttons */
 .btn {
     border: none; padding: 16px; font-size: 1.1rem; border-radius: 16px; cursor: pointer;
     font-weight: 600; transition: transform 0.1s ease; flex: 1;
 }
 .btn:active { transform: scale(0.96); }
 .btn-primary { background-color: var(--accent-color); color: white; }
-
-/* Secondary Button (auch Quickstart) */
 .btn-secondary { 
     background-color: var(--secondary-btn-bg); 
     color: var(--secondary-btn-text); 
-    border: 1px solid rgba(0,0,0,0.05); /* Zarter Rahmen für bessere Sichtbarkeit */
+    border: 1px solid rgba(0,0,0,0.05);
 }
-
-/* Quickstart spezifisch */
 .shortcut-btn { 
-    width: 100%; 
-    display: flex; 
-    justify-content: center; 
-    gap: 8px; 
-    padding: 12px; 
-    font-size: 0.95rem; 
+    width: 100%; display: flex; justify-content: center; gap: 8px; padding: 12px; font-size: 0.95rem; 
 }
 
 .settings-section { display: flex; flex-direction: column; gap: 15px; }
@@ -231,18 +214,36 @@ select {
 .setting-group label {
     font-size: 0.75rem; margin-bottom: 6px; display: block; opacity: 0.7; font-weight: 600; padding-left: 5px;
 }
-.notepad-area textarea { min-height: 80px; font-size: 0.9rem; line-height: 1.4; resize: none; }
 
-/* --- DESKTOP LAYOUT --- */
+/* HIER IST DER FIX FÜR DAS TEXTFELD: */
+.notepad-area textarea { 
+    min-height: 100px; 
+    height: 150px; /* Standard Höhe */
+    font-size: 0.9rem; 
+    line-height: 1.4; 
+    resize: none; 
+}
+
+/* --- DESKTOP LAYOUT (Ab 900px) --- */
 @media (min-width: 900px) {
     .app-container {
         max-width: 1000px;
         flex-direction: row; 
-        align-items: stretch;
+        align-items: flex-start; /* WICHTIG: Damit sie sich nicht unnötig strecken */
+        gap: 40px;
     }
-    .main-panel { flex: 1.2; justify-content: center; }
-    .settings-panel { flex: 0.8; }
-    .notepad-area textarea { height: 100%; min-height: 200px; }
+    
+    /* Wir steuern jetzt die Spaltenbreite */
+    .main-column { flex: 1.2; }
+    .settings-column { flex: 0.8; }
+    
+    .panel-column { display: flex; flex-direction: column; } /* Wrapper Logik */
+
+    .notepad-area textarea { 
+        /* Wir zwingen es auf eine feste Größe, statt 100% Höhe */
+        height: 200px; 
+    }
+    
     .app-title { font-size: 3.5rem; margin-bottom: 20px; }
-    .progress-container { max-width: 1000px; } /* Balken wächst mit auf Desktop */
+    .progress-container { max-width: 1000px; } 
 }
