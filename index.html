@@ -14,8 +14,11 @@
 
     <h1 class="app-title">Pomora <span>🍅</span></h1>
 
-    <div class="progress-container">
-        <div class="progress-bar" id="progress-bar"></div>
+    <div class="progress-wrapper">
+        <div class="progress-container">
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
+        <div id="progress-text">0%</div>
     </div>
 
     <div class="app-container">
@@ -49,8 +52,12 @@
 
                 <section class="controls-container">
                     <div class="main-controls">
-                        <button class="btn btn-primary" id="startBtn">Start</button>
-                        <button class="btn btn-secondary" id="resetBtn">Reset</button>
+                        <button class="btn btn-primary" id="startBtn">
+                            <span id="start-icon">▶</span> <span id="start-text">Start</span>
+                        </button>
+                        <button class="btn btn-secondary" id="resetBtn">
+                            <span>↻</span> Reset
+                        </button>
                     </div>
                     <button class="btn btn-secondary shortcut-btn" id="pomodoroShortcut">
                         <span>🚀</span> Quick Start (25/5)
@@ -95,7 +102,7 @@
                     </div>
 
                     <div class="notepad-area">
-                        <label>🧠 Brain Dump (Notizen)</label>
+                        <label>🧠 Brain Dump</label>
                         <textarea id="notepad" class="glass-input" placeholder="Schreib alles auf, was dich ablenkt..."></textarea>
                     </div>
                 </section>

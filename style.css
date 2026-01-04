@@ -56,7 +56,7 @@ body {
 .app-title {
     font-size: 2.5rem;
     font-weight: 800;
-    margin: 0 0 15px 0;
+    margin: 0 0 10px 0;
     letter-spacing: -1px;
     background: linear-gradient(135deg, var(--text-color) 0%, var(--accent-color) 100%);
     -webkit-background-clip: text;
@@ -66,13 +66,17 @@ body {
 }
 .app-title span { -webkit-text-fill-color: initial; }
 
-/* --- PROGRESS BAR (Mittig) --- */
+/* --- PROGRESS BAR & TEXT --- */
+.progress-wrapper {
+    width: 100%;
+    max-width: 450px;
+    margin-bottom: 30px;
+}
+
 .progress-container {
     width: 100%;
-    max-width: 450px; 
     height: 8px;
     background: rgba(128, 128, 128, 0.2); 
-    margin-bottom: 35px; /* Etwas mehr Platz zu den Labels */
     border-radius: 10px; 
     overflow: hidden; 
 }
@@ -85,6 +89,16 @@ body {
     border-radius: 10px;
 }
 
+#progress-text {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--accent-color);
+    margin-top: 5px;
+    text-align: left;
+    padding-left: 2px;
+    transition: color 0.3s ease;
+}
+
 /* --- LAYOUT --- */
 .app-container {
     width: 100%;
@@ -92,12 +106,11 @@ body {
     padding: 10px;
     display: flex;
     flex-direction: column;
-    gap: 30px; /* Mehr Abstand zwischen den Blöcken auf Mobile */
+    gap: 30px;
 }
 
-/* --- SECTION LABELS (NEU: Überschriften über den Boxen) --- */
 .section-label {
-    margin: 0 0 10px 5px; /* Kleiner Abstand zur Box darunter */
+    margin: 0 0 10px 5px;
     font-size: 0.85rem;
     text-transform: uppercase;
     letter-spacing: 1.5px;
@@ -111,6 +124,11 @@ body {
 .section-label .icon { font-size: 1.1rem; }
 
 /* --- PANELS --- */
+.panel-column {
+    display: flex;
+    flex-direction: column;
+}
+
 .glass-panel {
     background: var(--glass-bg);
     backdrop-filter: blur(25px);
@@ -123,6 +141,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 20px;
+    flex: 1; /* Gleiche Höhe erzwingen */
 }
 
 .glass-panel:hover {
@@ -130,7 +149,6 @@ body {
     box-shadow: 0 12px 40px rgba(0,0,0,0.15);
 }
 
-/* Inhalte */
 .header { display: flex; justify-content: space-between; align-items: center; }
 
 .stats-badge {
@@ -157,7 +175,21 @@ body {
 input:checked + .slider { background-color: #30d158; }
 input:checked + .slider:before { transform: translateX(18px); }
 
-/* --- INPUTS --- */
+/* --- UNIFORM LABELS (HIER IST DIE ÄNDERUNG) --- */
+/* Wir machen Fokuszeit, Pause, Atmosphäre und Brain Dump exakt gleich */
+.setting-group label,
+.notepad-area label {
+    font-size: 0.85rem;      /* Einheitliche Größe */
+    font-weight: 700;        /* Fett und lesbar */
+    text-transform: uppercase; /* Großbuchstaben für Ordnung */
+    letter-spacing: 0.5px;
+    color: var(--text-color);
+    opacity: 0.7;            /* Dezent, nicht zu aufdringlich */
+    margin-bottom: 8px;
+    display: block;
+    padding-left: 2px;
+}
+
 .glass-input, select {
     width: 100%; padding: 14px; border-radius: 14px;
     border: 1px solid var(--input-border); background: var(--input-bg);
@@ -195,14 +227,21 @@ select {
 .btn {
     border: none; padding: 16px; font-size: 1.1rem; border-radius: 16px; cursor: pointer;
     font-weight: 600; transition: transform 0.1s ease; flex: 1;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
 }
 .btn:active { transform: scale(0.96); }
 .btn-primary { background-color: var(--accent-color); color: white; }
+
 .btn-secondary { 
-    background-color: var(--secondary-btn-bg); 
-    color: var(--secondary-btn-text); 
-    border: 1px solid rgba(0,0,0,0.05);
+    background-color: rgba(128, 128, 128, 0.15); 
+    color: var(--text-color); 
+    border: 1px solid rgba(0, 0, 0, 0.1);
 }
+[data-theme="dark"] .btn-secondary {
+    background-color: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
 .shortcut-btn { 
     width: 100%; display: flex; justify-content: center; gap: 8px; padding: 12px; font-size: 0.95rem; 
 }
@@ -211,39 +250,30 @@ select {
 .settings-row { display: flex; gap: 15px; }
 .setting-group { flex: 1; text-align: left; }
 .full-width { width: 100%; }
-.setting-group label {
-    font-size: 0.75rem; margin-bottom: 6px; display: block; opacity: 0.7; font-weight: 600; padding-left: 5px;
-}
 
-/* HIER IST DER FIX FÜR DAS TEXTFELD: */
 .notepad-area textarea { 
     min-height: 100px; 
-    height: 150px; /* Standard Höhe */
+    height: 150px; 
     font-size: 0.9rem; 
     line-height: 1.4; 
     resize: none; 
 }
 
-/* --- DESKTOP LAYOUT (Ab 900px) --- */
+/* --- DESKTOP LAYOUT --- */
 @media (min-width: 900px) {
     .app-container {
         max-width: 1000px;
         flex-direction: row; 
-        align-items: flex-start; /* WICHTIG: Damit sie sich nicht unnötig strecken */
+        align-items: stretch;
         gap: 40px;
     }
     
-    /* Wir steuern jetzt die Spaltenbreite */
     .main-column { flex: 1.2; }
     .settings-column { flex: 0.8; }
     
-    .panel-column { display: flex; flex-direction: column; } /* Wrapper Logik */
-
     .notepad-area textarea { 
-        /* Wir zwingen es auf eine feste Größe, statt 100% Höhe */
         height: 200px; 
     }
     
-    .app-title { font-size: 3.5rem; margin-bottom: 20px; }
-    .progress-container { max-width: 1000px; } 
+    .progress-wrapper { max-width: 1000px; }
 }
