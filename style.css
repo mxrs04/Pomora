@@ -4,8 +4,9 @@
     --glass-bg: rgba(255, 255, 255, 0.75);
     --glass-border: rgba(255, 255, 255, 0.8);
     --glass-inset: rgba(0, 0, 0, 0.05);
-    --accent-color: #007aff; 
-    --pause-color: #30d158; /* NEU: Farbe für Pausen */
+    
+    --accent-color: #007aff; /* Blau für Fokus */
+    --pause-color: #ff9f0a;  /* NEU: Orange für Pause */
     
     --input-bg: rgba(255, 255, 255, 0.9); 
     --input-border: rgba(0, 0, 0, 0.1);
@@ -22,8 +23,9 @@
     --glass-bg: rgba(28, 28, 30, 0.65);
     --glass-border: rgba(255, 255, 255, 0.15);
     --glass-inset: rgba(255, 255, 255, 0.1);
+    
     --accent-color: #0a84ff;
-    --pause-color: #32d74b;
+    --pause-color: #ff9f0a; /* Orange leuchtet auch im Dark Mode gut */
     
     --input-bg: rgba(60, 60, 60, 0.8);
     --input-border: rgba(255, 255, 255, 0.2);
@@ -48,35 +50,13 @@ body {
     -webkit-tap-highlight-color: transparent;
     padding: 20px 10px;
     box-sizing: border-box;
-    /* Damit der Balken oben nicht verdeckt wird */
-    padding-top: 30px; 
-}
-
-/* --- PROGRESS BAR (Jetzt sichtbar!) --- */
-.progress-container {
-    width: 100%;
-    height: 8px; /* Etwas dicker */
-    background: rgba(128, 128, 128, 0.2); /* Sichtbare "Schiene" */
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 1000;
-}
-
-.progress-bar {
-    height: 100%;
-    background: var(--accent-color);
-    width: 0%;
-    transition: width 1s linear, background-color 0.3s ease;
-    box-shadow: 0 0 15px var(--accent-color); /* Leucht-Effekt */
-    border-radius: 0 4px 4px 0;
 }
 
 /* --- TITEL --- */
 .app-title {
     font-size: 2.5rem;
     font-weight: 800;
-    margin: 20px 0 30px 0;
+    margin: 0 0 15px 0; /* Etwas Platz nach unten zum Balken */
     letter-spacing: -1px;
     background: linear-gradient(135deg, var(--text-color) 0%, var(--accent-color) 100%);
     -webkit-background-clip: text;
@@ -85,6 +65,25 @@ body {
     text-align: center;
 }
 .app-title span { -webkit-text-fill-color: initial; }
+
+/* --- PROGRESS BAR (NEU POSITIONIERT) --- */
+.progress-container {
+    width: 100%;
+    max-width: 450px; /* Genau so breit wie die App-Boxen */
+    height: 8px;
+    background: rgba(128, 128, 128, 0.2); /* Dezent grau */
+    margin-bottom: 25px; /* Abstand zu den Panels */
+    border-radius: 10px; /* Schön rund */
+    overflow: hidden; /* Damit der Balken an den Ecken nicht übersteht */
+}
+
+.progress-bar {
+    height: 100%;
+    background: var(--accent-color);
+    width: 0%;
+    transition: width 1s linear, background-color 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 10px;
+}
 
 /* --- LAYOUT --- */
 .app-container {
@@ -96,6 +95,7 @@ body {
     gap: 20px;
 }
 
+/* --- PANELS --- */
 .glass-panel {
     background: var(--glass-bg);
     backdrop-filter: blur(25px);
@@ -115,6 +115,29 @@ body {
     box-shadow: 0 12px 40px rgba(0,0,0,0.15);
 }
 
+/* Panel Header */
+.panel-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--glass-border);
+}
+
+.panel-header h2 {
+    margin: 0;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-weight: 700;
+    color: var(--text-color);
+    opacity: 0.6;
+}
+
+.panel-header .icon { font-size: 1.2rem; }
+
+/* Inhalte */
 .header { display: flex; justify-content: space-between; align-items: center; }
 
 .stats-badge {
@@ -167,7 +190,7 @@ select {
     transition: color 0.3s ease;
 }
 
-/* NEU: Timer Farbe passt sich an */
+/* Timer Display */
 .timer-display {
     font-size: 4.5rem; font-weight: 200; font-variant-numeric: tabular-nums;
     line-height: 1; color: var(--text-color); transition: color 0.3s ease;
@@ -176,14 +199,30 @@ select {
 .controls-container { display: flex; flex-direction: column; gap: 12px; }
 .main-controls { display: flex; gap: 15px; }
 
+/* --- BUTTONS --- */
 .btn {
     border: none; padding: 16px; font-size: 1.1rem; border-radius: 16px; cursor: pointer;
     font-weight: 600; transition: transform 0.1s ease; flex: 1;
 }
 .btn:active { transform: scale(0.96); }
 .btn-primary { background-color: var(--accent-color); color: white; }
-.btn-secondary { background-color: var(--secondary-btn-bg); color: var(--secondary-btn-text); }
-.shortcut-btn { width: 100%; display: flex; justify-content: center; gap: 8px; padding: 12px; font-size: 0.95rem; }
+
+/* Secondary Button (auch Quickstart) */
+.btn-secondary { 
+    background-color: var(--secondary-btn-bg); 
+    color: var(--secondary-btn-text); 
+    border: 1px solid rgba(0,0,0,0.05); /* Zarter Rahmen für bessere Sichtbarkeit */
+}
+
+/* Quickstart spezifisch */
+.shortcut-btn { 
+    width: 100%; 
+    display: flex; 
+    justify-content: center; 
+    gap: 8px; 
+    padding: 12px; 
+    font-size: 0.95rem; 
+}
 
 .settings-section { display: flex; flex-direction: column; gap: 15px; }
 .settings-row { display: flex; gap: 15px; }
@@ -194,7 +233,7 @@ select {
 }
 .notepad-area textarea { min-height: 80px; font-size: 0.9rem; line-height: 1.4; resize: none; }
 
-/* --- DESKTOP LAYOUT (Ab 900px) --- */
+/* --- DESKTOP LAYOUT --- */
 @media (min-width: 900px) {
     .app-container {
         max-width: 1000px;
@@ -204,36 +243,6 @@ select {
     .main-panel { flex: 1.2; justify-content: center; }
     .settings-panel { flex: 0.8; }
     .notepad-area textarea { height: 100%; min-height: 200px; }
-    .app-title { font-size: 3.5rem; }
-}/* --- NEU: Panel Überschriften --- */
-.panel-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 20px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid var(--glass-border);
-}
-
-.panel-header h2 {
-    margin: 0;
-    font-size: 1rem;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    font-weight: 700;
-    color: var(--accent-color);
-    opacity: 0.9;
-}
-
-.panel-header .icon {
-    font-size: 1.2rem;
-}
-
-/* Optional: Brain Dump Label etwas schöner machen */
-.notepad-area label {
-    font-size: 0.85rem;
-    color: var(--accent-color);
-    margin-bottom: 8px;
-    display: block;
-    font-weight: 600;
+    .app-title { font-size: 3.5rem; margin-bottom: 20px; }
+    .progress-container { max-width: 1000px; } /* Balken wächst mit auf Desktop */
 }

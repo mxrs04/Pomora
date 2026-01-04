@@ -21,7 +21,6 @@ const elements = {
     shortcutBtn: document.getElementById('pomodoroShortcut'),
     resetBtn: document.getElementById('resetBtn'),
     progressBar: document.getElementById('progress-bar'),
-    // Audio
     audioClick: document.getElementById('audio-click'),
     audioGong: document.getElementById('audio-gong')
 };
@@ -33,7 +32,7 @@ function init() {
         elements.themeToggle.checked = true;
     }
     
-    // Audio Init
+    // Audio Settings
     const rain = document.getElementById('audio-rain');
     const white = document.getElementById('audio-white');
     const cafe = document.getElementById('audio-cafe');
@@ -47,7 +46,7 @@ function init() {
     elements.notepad.value = localStorage.getItem('notepadContent') || '';
     elements.mainTask.value = localStorage.getItem('mainTaskContent') || '';
     
-    updateColors(); // Farben initial setzen
+    updateColors();
 }
 
 // --- SOUND ---
@@ -80,10 +79,9 @@ function stopAmbience() {
 
 // --- VISUALS ---
 function updateColors() {
-    // Ändert Farben basierend auf Modus (Blau = Fokus, Grün = Pause)
+    // Blau (Focus) vs Orange (Pause)
     const colorVar = isFocusMode ? 'var(--accent-color)' : 'var(--pause-color)';
     
-    // Timer und Status färben
     if(isRunning) {
         elements.timer.style.color = colorVar;
         elements.status.style.color = colorVar;
@@ -92,7 +90,6 @@ function updateColors() {
         elements.status.style.color = 'var(--text-color)';
     }
     
-    // Balken färben
     if(elements.progressBar) {
         elements.progressBar.style.backgroundColor = colorVar;
         elements.progressBar.style.boxShadow = `0 0 15px ${colorVar}`;
@@ -107,7 +104,6 @@ function updateDisplay() {
     const modeName = isFocusMode ? 'Fokus' : 'Pause';
     document.title = `(${minutes}:${seconds.toString().padStart(2, '0')}) ${modeName} - Pomora`;
 
-    // Progress Bar
     if (elements.progressBar) {
         const progress = totalTime > 0 ? ((totalTime - timeLeft) / totalTime) * 100 : 0;
         elements.progressBar.style.width = `${Math.min(100, Math.max(0, progress))}%`;
@@ -177,14 +173,14 @@ function completeSession() {
         totalTime = timeLeft;
         elements.status.textContent = 'ZEIT FÜR PAUSE';
         elements.startBtn.textContent = 'Pause starten';
-        flashScreen('#30d158');
+        flashScreen('#ff9f0a'); // Orange aufblitzen für Pause
     } else {
         isFocusMode = true;
         timeLeft = parseInt(elements.focusSelect.value) * 60;
         totalTime = timeLeft;
         elements.status.textContent = 'FOKUS BEENDET';
         elements.startBtn.textContent = 'Fokus starten';
-        flashScreen('#0a84ff');
+        flashScreen('#007aff'); // Blau aufblitzen für Fokus
     }
     updateDisplay();
     updateColors();
