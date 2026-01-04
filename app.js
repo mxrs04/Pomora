@@ -10,6 +10,8 @@ let currentAudioId = null;
 const elements = {
     timer: document.getElementById('timer'),
     startBtn: document.getElementById('startBtn'),
+    startText: document.getElementById('start-text'),
+    startIcon: document.getElementById('start-icon'),
     status: document.getElementById('status-text'),
     themeToggle: document.getElementById('theme-toggle'),
     focusSelect: document.getElementById('focusTimeSelect'),
@@ -21,6 +23,7 @@ const elements = {
     shortcutBtn: document.getElementById('pomodoroShortcut'),
     resetBtn: document.getElementById('resetBtn'),
     progressBar: document.getElementById('progress-bar'),
+    progressText: document.getElementById('progress-text'),
     audioClick: document.getElementById('audio-click'),
     audioGong: document.getElementById('audio-gong')
 };
@@ -79,7 +82,6 @@ function stopAmbience() {
 
 // --- VISUALS ---
 function updateColors() {
-    // Blau (Focus) vs Orange (Pause)
     const colorVar = isFocusMode ? 'var(--accent-color)' : 'var(--pause-color)';
     
     if(isRunning) {
@@ -94,6 +96,9 @@ function updateColors() {
         elements.progressBar.style.backgroundColor = colorVar;
         elements.progressBar.style.boxShadow = `0 0 15px ${colorVar}`;
     }
+    if(elements.progressText) {
+        elements.progressText.style.color = colorVar;
+    }
 }
 
 function updateDisplay() {
@@ -104,9 +109,19 @@ function updateDisplay() {
     const modeName = isFocusMode ? 'Fokus' : 'Pause';
     document.title = `(${minutes}:${seconds.toString().padStart(2, '0')}) ${modeName} - Pomora`;
 
+    // Progress Update
     if (elements.progressBar) {
-        const progress = totalTime > 0 ? ((totalTime - timeLeft) / totalTime) * 100 : 0;
-        elements.progressBar.style.width = `${Math.min(100, Math.max(0, progress))}%`;
+        let percent = 0;
+        if(totalTime > 0) {
+            percent = ((totalTime - timeLeft) / totalTime) * 100;
+        }
+        percent = Math.min(100, Math.max(0, percent)); 
+
+        elements.progressBar.style.width = `${percent}%`;
+        
+        if(elements.progressText) {
+            elements.progressText.textContent = `${Math.round(percent)}%`;
+        }
     }
 }
 
@@ -116,7 +131,10 @@ function startTimer() {
     if(elements.audioClick) elements.audioClick.play();
     playSelectedAmbience();
 
-    elements.startBtn.textContent = 'Pause';
+    // Button Icon Update
+    elements.startText.textContent = 'Pause';
+    elements.startIcon.textContent = '⏸'; 
+    
     elements.status.textContent = isFocusMode ? 'FOKUS MODE' : 'PAUSENZEIT';
     elements.status.style.opacity = '1';
     
@@ -134,7 +152,10 @@ function startTimer() {
 function pauseTimer() {
     isRunning = false;
     clearInterval(timerId);
-    elements.startBtn.textContent = 'Weiter';
+    
+    elements.startText.textContent = 'Weiter';
+    elements.startIcon.textContent = '▶'; 
+
     elements.status.textContent = 'PAUSIERT';
     elements.status.style.opacity = '0.5';
     stopAmbience();
@@ -149,11 +170,14 @@ function resetTimer() {
     totalTime = timeLeft; 
 
     updateDisplay();
-    elements.startBtn.textContent = 'Start';
+    elements.startText.textContent = 'Start';
+    elements.startIcon.textContent = '▶';
+
     elements.status.textContent = 'BEREIT';
     elements.status.style.opacity = '1';
     
     if(elements.progressBar) elements.progressBar.style.width = '0%';
+    if(elements.progressText) elements.progressText.textContent = '0%';
     updateColors();
 }
 
@@ -172,15 +196,17 @@ function completeSession() {
         timeLeft = parseInt(elements.breakSelect.value) * 60;
         totalTime = timeLeft;
         elements.status.textContent = 'ZEIT FÜR PAUSE';
-        elements.startBtn.textContent = 'Pause starten';
-        flashScreen('#ff9f0a'); // Orange aufblitzen für Pause
+        elements.startText.textContent = 'Pause starten';
+        elements.startIcon.textContent = '▶';
+        flashScreen('#ff9f0a');
     } else {
         isFocusMode = true;
         timeLeft = parseInt(elements.focusSelect.value) * 60;
         totalTime = timeLeft;
         elements.status.textContent = 'FOKUS BEENDET';
-        elements.startBtn.textContent = 'Fokus starten';
-        flashScreen('#007aff'); // Blau aufblitzen für Fokus
+        elements.startText.textContent = 'Fokus starten';
+        elements.startIcon.textContent = '▶';
+        flashScreen('#007aff');
     }
     updateDisplay();
     updateColors();
