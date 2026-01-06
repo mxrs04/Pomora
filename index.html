@@ -47,7 +47,10 @@
                 </section>
 
                 <section class="task-section">
-                    <input type="text" id="main-task-input" class="glass-input" placeholder="Woran arbeitest du gerade?">
+                    <div class="input-wrapper">
+                         <input type="text" id="main-task-input" class="glass-input" placeholder="Woran arbeitest du gerade?">
+                          <button class="clear-btn" id="clear-task" title="Löschen">✕</button>
+                     </div>
                 </section>
 
                 <section class="controls-container">
@@ -101,9 +104,12 @@
                         </select>
                     </div>
 
-                    <div class="notepad-area">
+                   <div class="notepad-area">
                         <label>🧠 Brain Dump</label>
-                        <textarea id="notepad" class="glass-input" placeholder="Schreib alles auf, was dich ablenkt..."></textarea>
+                        <div class="input-wrapper">
+                            <textarea id="notepad" class="glass-input" placeholder="Schreib alles auf, was dich ablenkt..."></textarea>
+                            <button class="clear-btn" id="clear-note" title="Löschen">✕</button>
+                        </div>
                     </div>
                 </section>
             </div>
