@@ -263,4 +263,53 @@ function flashScreen(color) {
     setTimeout(() => { document.body.style.backgroundColor = ""; }, 300);
 }
 
+
+// --- CLEAR INPUT FEATURE (Optimiert) ---
+
+function setupClearButton(inputId, buttonId, storageKey) {
+    const input = document.getElementById(inputId);
+    const btn = document.getElementById(buttonId);
+    
+    if (!input || !btn) return;
+
+    // Hilfsfunktion: Sichtbarkeit prüfen
+    const updateVisibility = () => {
+        if (input.value && input.value.trim().length > 0) {
+            btn.classList.add('visible');
+        } else {
+            btn.classList.remove('visible');
+        }
+    };
+
+    // Hilfsfunktion: Text löschen
+    const clearText = (e) => {
+        e.preventDefault(); // Verhindert Fokus-Verlust Probleme
+        input.value = '';   // Text leeren
+        input.focus();      // Fokus zurück ins Feld
+        updateVisibility(); // X ausblenden
+        
+        // Speicher leeren
+        if (storageKey) localStorage.setItem(storageKey, '');
+    };
+
+    // Events für das Tippen
+    input.addEventListener('input', () => {
+        updateVisibility();
+        if (storageKey) localStorage.setItem(storageKey, input.value);
+    });
+
+    // Events für das Klicken (Maus & Touch)
+    btn.addEventListener('click', clearText);
+    btn.addEventListener('touchstart', clearText, {passive: false});
+
+    // Check beim Start
+    updateVisibility();
+}
+
+// Initialisierung der Buttons mit kurzer Verzögerung
+setTimeout(() => {
+    setupClearButton('main-task-input', 'clear-task', 'mainTaskContent');
+    setupClearButton('notepad', 'clear-note', 'notepadContent');
+}, 100);
+
 init();

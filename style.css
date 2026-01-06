@@ -277,3 +277,96 @@ select {
     
     .progress-wrapper { max-width: 1000px; }
 }
+/* --- CLEAR BUTTON STYLING --- */
+
+/* --- INPUT WRAPPER (Damit das X im Feld liegt) --- */
+.input-wrapper {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+/* Platz im Textfeld schaffen, damit Text nicht unter dem X verschwindet */
+.input-wrapper input,
+.input-wrapper textarea {
+    padding-right: 40px !important; /* Wichtig für Abstand rechts */
+}
+
+/* --- DAS RUNDE X (DESIGN) --- */
+.clear-btn {
+    position: absolute;
+    right: 10px;            /* Abstand vom rechten Rand */
+    top: 50%;
+    transform: translateY(-50%) scale(0.8); /* Mittig & Start-Größe */
+    
+    width: 22px;            /* Feste Breite für Kreis */
+    height: 22px;           /* Feste Höhe für Kreis */
+    border-radius: 50%;     /* Macht es perfekt rund */
+    
+    background-color: rgba(142, 142, 147, 0.3); /* Dezent Grau (iOS Style) */
+    color: var(--glass-bg); /* Farbe des X (Heller Kontrast) */
+    
+    border: none;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    opacity: 0;             /* Unsichtbar wenn leer */
+    pointer-events: none;   /* Nicht klickbar wenn unsichtbar */
+    transition: all 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
+    z-index: 10;            /* Sicherstellen, dass es OBERHALB des Inputs liegt */
+}
+
+/* Das X-Zeichen selbst */
+.cross-icon {
+    font-size: 16px;
+    line-height: 1;
+    font-weight: 700;
+    margin-bottom: 1px; /* Optische Korrektur */
+}
+
+/* Sichtbarer Zustand */
+.clear-btn.visible {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(-50%) scale(1);
+}
+
+/* Hover Effekt */
+.clear-btn.visible:hover {
+    background-color: rgba(142, 142, 147, 0.8); /* Dunkler beim Drüberfahren */
+    transform: translateY(-50%) scale(1.1);
+}
+
+/* Dunkelmodus Anpassung */
+[data-theme="dark"] .clear-btn {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #000;
+}
+[data-theme="dark"] .clear-btn:hover {
+    background-color: rgba(255, 255, 255, 0.4);
+}
+
+/* --- SPEZIALFALL: TEXTAREA (Brain Dump) --- */
+/* Bei der großen Box soll das X oben rechts sitzen */
+.notepad-area .input-wrapper {
+    align-items: flex-start; 
+}
+
+.notepad-area .clear-btn {
+    top: 15px;      /* Abstand von oben */
+    transform: scale(0.8); /* Kein vertikales Zentrieren nötig hier */
+}
+
+.notepad-area .clear-btn.visible {
+    transform: scale(1);
+}
+
+.notepad-area .clear-btn.visible:hover {
+    transform: scale(1.1);
+}

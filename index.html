@@ -46,12 +46,14 @@
                     <div class="timer-display" id="timer">25:00</div>
                 </section>
 
-                <section class="task-section">
-                    <div class="input-wrapper">
-                         <input type="text" id="main-task-input" class="glass-input" placeholder="Woran arbeitest du gerade?">
-                          <button class="clear-btn" id="clear-task" title="Löschen">✕</button>
-                     </div>
-                </section>
+                    <section class="task-section">
+                        <div class="input-wrapper">
+                            <input type="text" id="main-task-input" class="glass-input" placeholder="Woran arbeitest du gerade?">
+                            <button type="button" class="clear-btn" id="clear-task" aria-label="Löschen">
+                                <span class="cross-icon">×</span>
+                            </button>
+                        </div>
+                    </section>
 
                 <section class="controls-container">
                     <div class="main-controls">
@@ -104,13 +106,15 @@
                         </select>
                     </div>
 
-                   <div class="notepad-area">
-                        <label>🧠 Brain Dump</label>
-                        <div class="input-wrapper">
-                            <textarea id="notepad" class="glass-input" placeholder="Schreib alles auf, was dich ablenkt..."></textarea>
-                            <button class="clear-btn" id="clear-note" title="Löschen">✕</button>
-                        </div>
+                  <div class="notepad-area">
+                    <label>🧠 Brain Dump</label>
+                    <div class="input-wrapper">
+                        <textarea id="notepad" class="glass-input" placeholder="Schreib alles auf, was dich ablenkt..."></textarea>
+                        <button type="button" class="clear-btn" id="clear-note" aria-label="Löschen">
+                            <span class="cross-icon">×</span>
+                        </button>
                     </div>
+                </div>
                 </section>
             </div>
         </div>
